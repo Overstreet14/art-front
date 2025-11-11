@@ -184,7 +184,7 @@ const SignUpModal: React.FC<{ open: boolean; onClose: () => void; onLoginClick: 
 };
 
 // Pass handler for login/signup click down to Header
-const Header: React.FC<{onLoginClick: () => void, onSignUpClick: () => void}> = ({ onLoginClick, onSignUpClick }) => (
+const Header: React.FC<{onLoginClick: () => void, onSignUpClick: () => void, onArtPrintsClick: () => void}> = ({ onLoginClick, onSignUpClick, onArtPrintsClick }) => (
   <header style={{
     padding: window.innerWidth < 600 ? "10px 6px" : 12,
     borderBottom: "1px solid #e5e7eb",
@@ -195,7 +195,7 @@ const Header: React.FC<{onLoginClick: () => void, onSignUpClick: () => void}> = 
   }}>
     <div style={{display: "flex", gap: 8, minWidth:0}}>
       <button style={navBtn}>NEW ARRIVALS</button>
-      <button style={navBtn}>ART PRINTS</button>
+      <button style={navBtn} onClick={onArtPrintsClick}>ART PRINTS</button>
       <select style={navBtn}>
         <option>ARTISTS</option>
       </select>
@@ -369,7 +369,7 @@ const authBtn: React.CSSProperties = {
 };
 
 // HomePage Assembly
-const HomePage: React.FC = () => {
+const HomePage: React.FC<{ onNavigateToArtPrints: () => void }> = ({ onNavigateToArtPrints }) => {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
   // force rerender on resize for live responsiveness
@@ -394,27 +394,8 @@ const HomePage: React.FC = () => {
       <Header
         onLoginClick={() => { setShowLogin(true); setShowSignUp(false); }}
         onSignUpClick={() => { setShowSignUp(true); setShowLogin(false); }}
+        onArtPrintsClick={onNavigateToArtPrints}
       />
-      {/* INSERTED HEADER SECTION UNDER NAVBAR */}
-      <div
-        style={{
-          width: "100%",
-          boxSizing: "border-box",
-          padding: "18px 24px 12px 24px",
-          background: "#f9fafb",
-          borderBottom: "1px solid #ececec",
-        }}
-      >
-        <h2 style={{
-          fontSize: "1.6rem",
-          fontWeight: 600,
-          margin: 0,
-          color: "#171c23",
-          letterSpacing: "0.02em"
-        }}>
-          WHERE ART MEETS CREATIVITY
-        </h2>
-      </div>
       <div
         style={{
           flex: 1,
