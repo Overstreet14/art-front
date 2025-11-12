@@ -2,37 +2,12 @@ import React, { useState, useEffect } from "react";
 import Header from "./layouts/Header";
 import LoginModal from "./layouts/LoginModal";
 import SignUpModal from "./layouts/SignUpModal";
+import { artistsData } from "./artistsData";
 
 // Art Card Component for Masonry
-const ArtCard: React.FC<{ index: number }> = ({ index }) => {
-  // Vary image heights for masonry effect
-  const heights = [280, 320, 300, 360, 290, 340, 310, 350, 300, 330, 280, 360, 290, 340, 320, 300];
+const ArtCard: React.FC<{ image: string; title: string; index: number }> = ({ image, title, index }) => {
+  const heights = [280, 320, 300, 360, 290, 340, 310, 350, 300, 330, 280, 360];
   const height = heights[index % heights.length];
-  
-  const images = [
-    "https://images.unsplash.com/photo-1465101162946-4377e57745c3?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1511593358241-7eea1f3c84e5?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1499781350541-7783f6c6a0c8?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1505142468610-359e7d316be0?auto=format&fit=crop&w=400&q=80",
-  ];
-  
-  const titles = [
-    "Abstract Harmony",
-    "Urban Dreams",
-    "Nature's Canvas",
-    "Color Symphony",
-    "Minimalist Flow",
-    "Vibrant Essence",
-    "Serene Landscape",
-    "Bold Expression",
-  ];
-  
-  const imageUrl = images[index % images.length];
-  const title = titles[index % titles.length];
   
   return (
     <div style={{
@@ -46,7 +21,7 @@ const ArtCard: React.FC<{ index: number }> = ({ index }) => {
       overflow: "hidden",
     }}>
       <img
-        src={imageUrl}
+        src={image}
         alt={title}
         style={{
           width: "100%",
@@ -63,9 +38,8 @@ const ArtCard: React.FC<{ index: number }> = ({ index }) => {
       }}>
         <div style={{fontWeight: 600, fontSize: 16, color: "#151f33"}}>{title}</div>
         <div style={{display: "flex", flexWrap: "wrap", gap: 8}}>
-          <span style={pill}>Modern</span>
-          <span style={pill}>Abstract</span>
           <span style={pill}>Art Print</span>
+          <span style={pill}>Available</span>
         </div>
       </div>
     </div>
@@ -82,15 +56,18 @@ const pill: React.CSSProperties = {
   fontWeight: 600,
 };
 
-// ArtPrints Component
-const ArtPrints: React.FC<{ 
-  onBack: () => void;
+// ArtistDetail Component
+const ArtistDetail: React.FC<{ 
+  artistId: number;
   onNavigateToHome?: () => void;
   onNavigateToArtPrints?: () => void;
-}> = ({ onBack, onNavigateToHome, onNavigateToArtPrints }) => {
+  onNavigateToArtists?: () => void;
+}> = ({ artistId, onNavigateToHome, onNavigateToArtPrints, onNavigateToArtists }) => {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
   const [, forceUpdate] = useState(0);
+  
+  const artist = artistsData.find(a => a.id === artistId) || artistsData[0];
   
   useEffect(() => {
     const handleResize = () => forceUpdate(n => n + 1);
@@ -126,8 +103,9 @@ const ArtPrints: React.FC<{
         onLoginClick={() => { setShowLogin(true); setShowSignUp(false); }}
         onSignUpClick={() => { setShowSignUp(true); setShowLogin(false); }}
         onArtPrintsClick={onNavigateToArtPrints || (() => {})}
-        onHomeClick={onNavigateToHome || onBack}
-        currentPage="artprints"
+        onArtistsClick={onNavigateToArtists}
+        onHomeClick={onNavigateToHome}
+        currentPage="artists"
       />
       <div
         style={{
@@ -138,15 +116,86 @@ const ArtPrints: React.FC<{
           boxSizing: 'border-box',
         }}
       >
-        <h1 style={{
-          fontSize: window.innerWidth < 600 ? 32 : 48,
+        {/* Artist Profile Section */}
+        <div style={{
+          display: 'flex',
+          flexDirection: window.innerWidth < 900 ? 'column' : 'row',
+          gap: 32,
+          marginBottom: 48,
+          alignItems: window.innerWidth < 900 ? 'center' : 'flex-start',
+        }}>
+          <img
+            src={artist.image}
+            alt={artist.name}
+            style={{
+              width: window.innerWidth < 900 ? '100%' : 300,
+              maxWidth: 300,
+              height: 300,
+              objectFit: 'cover',
+              borderRadius: 12,
+              boxShadow: "0 4px 12px #0002",
+            }}
+          />
+          <div style={{
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 16,
+          }}>
+            <h1 style={{
+              fontSize: window.innerWidth < 600 ? 32 : 48,
+              fontWeight: 700,
+              color: "#171c23",
+              letterSpacing: -1,
+              margin: 0,
+            }}>
+              {artist.name}
+            </h1>
+            <div style={{
+              fontSize: 20,
+              color: "#6b7280",
+              fontWeight: 500,
+            }}>
+              {artist.specialty}
+            </div>
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 12,
+              fontSize: 15,
+              color: "#9ca3af",
+              marginTop: 8,
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ fontSize: 14 }}>📍</span>
+                <span>{artist.location}</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ fontSize: 14 }}>🎨</span>
+                <span>{artist.works}</span>
+              </div>
+            </div>
+            <div style={{
+              fontSize: 16,
+              lineHeight: 1.6,
+              color: "#4b5563",
+              marginTop: 16,
+            }}>
+              {artist.bio}
+            </div>
+          </div>
+        </div>
+
+        {/* Artist's Art Gallery */}
+        <h2 style={{
+          fontSize: window.innerWidth < 600 ? 24 : 36,
           fontWeight: 700,
           marginBottom: 32,
           color: "#171c23",
-          letterSpacing: -1,
+          letterSpacing: -0.5,
         }}>
-          Art Prints Gallery
-        </h1>
+          Artwork Collection
+        </h2>
 
         <div
           style={{
@@ -155,8 +204,8 @@ const ArtPrints: React.FC<{
             width: '100%',
           }}
         >
-          {Array.from({ length: 24 }).map((_, idx) => (
-            <ArtCard key={idx} index={idx} />
+          {artist.artImages.map((image, idx) => (
+            <ArtCard key={idx} image={image} title={artist.artTitles[idx]} index={idx} />
           ))}
         </div>
       </div>
@@ -174,5 +223,5 @@ const ArtPrints: React.FC<{
   );
 };
 
-export default ArtPrints;
+export default ArtistDetail;
 
