@@ -114,8 +114,57 @@ const ArtistDetail: React.FC<{
           margin: '0 auto',
           padding: `${padding}px`,
           boxSizing: 'border-box',
+          position: 'relative',
         }}
       >
+        {/* Back Arrow Button */}
+        <button
+          onClick={onNavigateToArtists}
+          style={{
+            position: 'absolute',
+            top: window.innerWidth < 600 ? 16 : 24,
+            right: window.innerWidth < 600 ? 16 : 24,
+            background: '#fff',
+            border: '1px solid #e5e7eb',
+            borderRadius: 8,
+            width: 40,
+            height: 40,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+            transition: 'all 0.2s ease',
+            zIndex: 10,
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = '#f9fafb';
+            e.currentTarget.style.borderColor = '#d1d5db';
+            e.currentTarget.style.transform = 'translateX(-2px)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = '#fff';
+            e.currentTarget.style.borderColor = '#e5e7eb';
+            e.currentTarget.style.transform = 'translateX(0)';
+          }}
+          aria-label="Back to Featured Artists"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12.5 15L7.5 10L12.5 5"
+              stroke="#151f33"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </button>
         {/* Artist Profile Section */}
         <div style={{
           display: 'flex',

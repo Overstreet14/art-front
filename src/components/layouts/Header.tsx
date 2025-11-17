@@ -97,7 +97,13 @@ const NavSelect: React.FC<{
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={onArtistsClick}
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (onArtistsClick) {
+          onArtistsClick();
+        }
+      }}
     >
       ARTISTS
     </button>
@@ -119,14 +125,15 @@ const Header: React.FC<{
     display: "flex",
     alignItems: "center",
     background: "#f9fafb",
-    justifyContent: "space-between"
+    position: "relative"
   }}>
-    <div style={{display: "flex", gap: 8, minWidth:0}}>
+    <div style={{flex: 1}} />
+    <div style={{display: "flex", gap: 8, minWidth:0, justifyContent: "center"}}>
       <NavButton isActive={currentPage === "home"} onClick={onHomeClick}>NEW ARRIVALS</NavButton>
       <NavButton isActive={currentPage === "artprints"} onClick={onArtPrintsClick}>ART PRINTS</NavButton>
       <NavSelect onArtistsClick={onArtistsClick} isActive={currentPage === "artists"} />
     </div>
-    <div style={{display: "flex", gap: 8, minWidth:0}}>
+    <div style={{flex: 1, display: "flex", gap: 8, minWidth:0, justifyContent: "flex-end"}}>
       <AuthButton onClick={onLoginClick}>Login</AuthButton>
       <AuthButton onClick={onSignUpClick}>Sign Up</AuthButton>
     </div>

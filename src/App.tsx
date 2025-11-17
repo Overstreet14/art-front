@@ -14,6 +14,7 @@ function App() {
         onBack={() => setCurrentPage("home")}
         onNavigateToHome={() => setCurrentPage("home")}
         onNavigateToArtPrints={() => setCurrentPage("artprints")}
+        onNavigateToArtists={() => setCurrentPage("artists")}
       />
     );
   }

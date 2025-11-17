@@ -87,7 +87,8 @@ const ArtPrints: React.FC<{
   onBack: () => void;
   onNavigateToHome?: () => void;
   onNavigateToArtPrints?: () => void;
-}> = ({ onBack, onNavigateToHome, onNavigateToArtPrints }) => {
+  onNavigateToArtists?: () => void;
+}> = ({ onBack, onNavigateToHome, onNavigateToArtPrints, onNavigateToArtists }) => {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
   const [, forceUpdate] = useState(0);
@@ -126,6 +127,7 @@ const ArtPrints: React.FC<{
         onLoginClick={() => { setShowLogin(true); setShowSignUp(false); }}
         onSignUpClick={() => { setShowSignUp(true); setShowLogin(false); }}
         onArtPrintsClick={onNavigateToArtPrints || (() => {})}
+        onArtistsClick={onNavigateToArtists}
         onHomeClick={onNavigateToHome || onBack}
         currentPage="artprints"
       />
