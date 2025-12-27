@@ -143,25 +143,18 @@ const ArtistProfile: React.FC = () => {
                     marginBottom: 48,
                     boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
                 }}>
-                    {/* Cover/Avatar Image */}
+                    {/* Cover/Avatar Image - Full Width Background */}
                     <div style={{
                         width: "100%",
                         height: isSmall ? 200 : 300,
-                        background: `linear-gradient(135deg, #667eea 0%, #764ba2 100%)`,
+                        background: artist.avatarUrl
+                            ? `url(${artist.avatarUrl})`
+                            : `linear-gradient(135deg, #667eea 0%, #764ba2 100%)`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
                         position: "relative",
                         overflow: "hidden",
                     }}>
-                        {artist.avatarUrl && (
-                            <img
-                                src={artist.avatarUrl}
-                                alt={artist.name}
-                                style={{
-                                    width: "100%",
-                                    height: "100%",
-                                    objectFit: "cover",
-                                }}
-                            />
-                        )}
                     </div>
 
                     {/* Artist Info */}

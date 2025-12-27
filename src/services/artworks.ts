@@ -94,3 +94,21 @@ export async function setArtworkPrintShops(
     throw new Error(error || 'Failed to set eligible print shops');
   }
 }
+
+/**
+ * Get artwork status and availability details
+ * @param artworkId Artwork ID
+ * @returns Artwork status information
+ */
+export async function getArtworkStatus(artworkId: string): Promise<any> {
+  const res = await fetch(`${API_BASE}/artworks/status?artworkId=${artworkId}`, {
+    credentials: 'include',
+  });
+
+  if (!res.ok) {
+    const error = await res.text();
+    throw new Error(error || 'Failed to fetch artwork status');
+  }
+
+  return res.json();
+}

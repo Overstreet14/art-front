@@ -1,6 +1,39 @@
 import type { CartItem as FrontendCartItem } from '../context/CartContext';
+import { auth } from '../lib/firebase';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+
+/**
+ * Refresh backend session if expired
+ */
+const refreshSession = async (): Promise<void> => {
+    try {
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+            throw new Error('User not authenticated');
+        }
+
+        // Get fresh ID token
+        const idToken = await currentUser.getIdToken(true); // Force refresh
+
+        // Create new session
+        const response = await fetch(`${API_BASE}/sessionLogin`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ token: idToken }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to refresh session');
+        }
+
+        console.log('✅ Session refreshed successfully');
+    } catch (error) {
+        console.error('❌ Session refresh failed:', error);
+        throw error;
+    }
+};
 
 export interface BackendCartItem {
     artworkId: string;
@@ -20,7 +53,7 @@ export interface BackendCartItem {
  * Add item to backend cart
  * @param item Cart item to add
  */
-export const addToBackendCart = async (item: BackendCartItem): Promise<void> => {
+export const addToBackendCart = async (item: BackendCartItem, retryCount = 0): Promise<void> => {
     console.log('📤 Adding to backend cart:', item);
     const res = await fetch(`${API_BASE}/cart/add`, {
         method: 'POST',
@@ -33,6 +66,20 @@ export const addToBackendCart = async (item: BackendCartItem): Promise<void> => 
 
     if (!res.ok) {
         const error = await res.text();
+
+        // If 401 and haven't retried yet, refresh session and retry
+        if (res.status === 401 && retryCount === 0) {
+            console.log('🔄 Session expired, refreshing and retrying...');
+            try {
+                await refreshSession();
+                // Retry once with fresh session
+                return await addToBackendCart(item, retryCount + 1);
+            } catch (refreshError) {
+                console.error('❌ Session refresh failed:', refreshError);
+                throw new Error('Please log in again to continue');
+            }
+        }
+
         console.error('❌ Failed to add to cart:', error);
         throw new Error(`Failed to add to cart (${res.status}): ${error || res.statusText}`);
     }
@@ -71,13 +118,26 @@ export const syncCartToBackend = async (frontendCartItems: FrontendCartItem[]): 
 /**
  * Get backend cart
  */
-export const getBackendCart = async (): Promise<any> => {
+export const getBackendCart = async (retryCount = 0): Promise<any> => {
     const res = await fetch(`${API_BASE}/cart`, {
         credentials: 'include',
     });
 
     if (!res.ok) {
         const error = await res.text();
+
+        // If 401 and haven't retried yet, refresh session and retry
+        if (res.status === 401 && retryCount === 0) {
+            console.log('🔄 Session expired, refreshing and retrying...');
+            try {
+                await refreshSession();
+                return await getBackendCart(retryCount + 1);
+            } catch (refreshError) {
+                console.error('❌ Session refresh failed:', refreshError);
+                throw new Error('Please log in again to continue');
+            }
+        }
+
         throw new Error(error || 'Failed to get cart');
     }
 
@@ -87,7 +147,7 @@ export const getBackendCart = async (): Promise<any> => {
 /**
  * Remove item from backend cart
  */
-export const removeFromBackendCart = async (artworkId: string): Promise<void> => {
+export const removeFromBackendCart = async (artworkId: string, retryCount = 0): Promise<void> => {
     const res = await fetch(`${API_BASE}/cart/remove`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
@@ -97,6 +157,19 @@ export const removeFromBackendCart = async (artworkId: string): Promise<void> =>
 
     if (!res.ok) {
         const error = await res.text();
+
+        // If 401 and haven't retried yet, refresh session and retry
+        if (res.status === 401 && retryCount === 0) {
+            console.log('🔄 Session expired, refreshing and retrying...');
+            try {
+                await refreshSession();
+                return await removeFromBackendCart(artworkId, retryCount + 1);
+            } catch (refreshError) {
+                console.error('❌ Session refresh failed:', refreshError);
+                throw new Error('Please log in again to continue');
+            }
+        }
+
         throw new Error(error || 'Failed to remove from cart');
     }
 };

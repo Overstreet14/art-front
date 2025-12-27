@@ -410,3 +410,137 @@ export const calculateServicePrice = async (
 
     return res.json();
 };
+
+// ============================================
+// Public Print Shop APIs
+// ============================================
+
+/**
+ * Get detailed print shop information (public)
+ * @param shopId Print shop ID
+ * @returns Detailed shop information including services, frames, sizes, materials
+ */
+export const getPrintShopDetails = async (shopId: string): Promise<any> => {
+    const res = await fetch(`${API_BASE}/printshops/details?shopId=${shopId}`, {
+        credentials: 'include',
+    });
+
+    if (!res.ok) {
+        const error = await res.text();
+        throw new Error(error || 'Failed to fetch print shop details');
+    }
+
+    return res.json();
+};
+
+/**
+ * Calculate price for a specific print shop
+ * @param shopId Print shop ID
+ * @param options Price calculation options
+ * @returns Price calculation result
+ */
+export const calculatePrintShopPrice = async (
+    shopId: string,
+    options: PriceCalculationRequest
+): Promise<PriceCalculationResponse> => {
+    const res = await fetch(`${API_BASE}/printshops/calculate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ shopId, ...options }),
+    });
+
+    if (!res.ok) {
+        const error = await res.text();
+        throw new Error(error || 'Failed to calculate price');
+    }
+
+    return res.json();
+};
+
+// ============================================
+// Frame Image Management APIs
+// ============================================
+
+/**
+ * Upload frame preview image
+ * @param frameId Frame ID
+ * @param imageFile Image file to upload
+ * @returns Upload result
+ */
+export const uploadFrameImage = async (frameId: string, imageFile: File): Promise<any> => {
+    const formData = new FormData();
+    formData.append('image', imageFile);
+
+    const res = await fetch(`${API_BASE}/printshop/frames/upload?frameId=${frameId}`, {
+        method: 'POST',
+        credentials: 'include',
+        body: formData,
+    });
+
+    if (!res.ok) {
+        const error = await res.text();
+        throw new Error(error || 'Failed to upload frame image');
+    }
+
+    return res.json();
+};
+
+/**
+ * List frame images
+ * @param frameId Frame ID
+ * @returns List of frame image URLs
+ */
+export const listFrameImages = async (frameId: string): Promise<string[]> => {
+    const res = await fetch(`${API_BASE}/printshop/frames/list?frameId=${frameId}`, {
+        credentials: 'include',
+    });
+
+    if (!res.ok) {
+        const error = await res.text();
+        throw new Error(error || 'Failed to list frame images');
+    }
+
+    return res.json();
+};
+
+/**
+ * Remove frame image
+ * @param frameId Frame ID
+ * @param imageUrl Image URL to remove
+ */
+export const removeFrameImage = async (frameId: string, imageUrl: string): Promise<void> => {
+    const res = await fetch(`${API_BASE}/printshop/frames/remove`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ frameId, imageUrl }),
+    });
+
+    if (!res.ok) {
+        const error = await res.text();
+        throw new Error(error || 'Failed to remove frame image');
+    }
+};
+
+// ============================================
+// Order Issue Reporting
+// ============================================
+
+/**
+ * Report issue with print shop order
+ * @param issue Order issue details
+ */
+export const reportOrderIssue = async (issue: any): Promise<void> => {
+    const res = await fetch(`${API_BASE}/printshop/orders/report-issue`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(issue),
+    });
+
+    if (!res.ok) {
+        const error = await res.text();
+        throw new Error(error || 'Failed to report order issue');
+    }
+};

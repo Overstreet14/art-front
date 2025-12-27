@@ -43,3 +43,16 @@ export interface CheckoutRequest {
 // Backend returns Order directly, not wrapped in {order: ...}
 export type CheckoutResponse = Order;
 
+export interface OrderMatch {
+    printShopId: string;
+    printShopName: string;
+    matchScore: number;
+    estimatedPrice: number;
+    estimatedDelivery: string;
+    distance?: number;
+}
+
+export interface OrderAssignRequest {
+    orderId: string;
+    printShopId: string;
+}

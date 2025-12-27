@@ -124,3 +124,24 @@ export interface PriceCalculationResponse {
         value: number;
     }[];
 }
+
+// Detailed print shop information (public endpoint)
+export interface PrintShopDetails extends PrintShop {
+    services: PrintService[];
+    frames: Frame[];
+    sizes: Size[];
+    materials: Material[];
+    statistics?: {
+        totalOrders: number;
+        completedOrders: number;
+        averageRating: number;
+    };
+}
+
+// Order issue reporting
+export interface OrderIssue {
+    orderId: string;
+    issueType: 'quality' | 'delay' | 'damage' | 'other';
+    description: string;
+    images?: string[];
+}

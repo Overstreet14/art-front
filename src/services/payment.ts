@@ -80,3 +80,21 @@ export const getPaymentDetail = async (paymentId: string): Promise<Payment> => {
 
     return res.json();
 };
+
+/**
+ * Handle payment webhook (typically server-side, but included for completeness)
+ * @param webhookData Webhook payload from payment provider
+ */
+export const handlePaymentWebhook = async (webhookData: any): Promise<void> => {
+    const res = await fetch(`${API_BASE}/payments/webhook/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(webhookData),
+    });
+
+    if (!res.ok) {
+        const error = await res.text();
+        throw new Error(error || 'Failed to process webhook');
+    }
+};

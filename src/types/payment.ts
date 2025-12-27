@@ -36,3 +36,9 @@ export interface PaymentResponse {
     paymentUrl?: string; // For providers that need redirect
     providerData?: Record<string, any>;
 }
+
+export interface WebhookPayload {
+    event: string;
+    paymentId: string;
+    data: Record<string, any>;
+}
