@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
-import ArtPrintLogo from '../../assets/PaaJuuPrints.svg';
+import ArtPrintLogo from '../../assets/paajuuprints.svg';
 import { Button } from "../ui/button";
 import UserMenu from "./UserMenu";
 import LoginModal from "../features/auth/LoginModal";

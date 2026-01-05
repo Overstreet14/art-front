@@ -3,7 +3,7 @@ import Header from "../navigation/Header";
 import ArtCard from "../artworks/ArtCard";
 import { fetchArtworks } from "../../services/artworks";
 import type { Artwork } from "../../services/artworks";
-import ArtPrintLogo from '../../assets/PaaJuuPrints.svg';
+import ArtPrintLogo from '../../assets/paajuuprints.svg';
 
 // Heights for masonry effect
 const getMasonryHeight = (index: number): number => {

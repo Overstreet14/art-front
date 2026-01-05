@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import ArtPrintLogo from '../assets/PaaJuuPrints.svg';
+import ArtPrintLogo from '../assets/paajuuprints.svg';
 import { Button } from '../components/ui/button';
 import Footer from '../components/navigation/Footer';
 import ServiceManager from '../components/printshop/ServiceManager';

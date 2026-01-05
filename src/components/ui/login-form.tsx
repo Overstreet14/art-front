@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label"
 import { toast } from "sonner"
 import { useNavigate } from "react-router-dom"
 import { useState } from "react"
-import Logo from "@/assets/PaaJuuPrints.svg"
+import Logo from "@/assets/paajuuprints.svg"
 
 export function LoginForm({
   className,

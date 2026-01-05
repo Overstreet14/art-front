@@ -4,7 +4,7 @@ import { useCart } from '../context/CartContext';
 import { checkout } from '../services/orders';
 import { createPayment } from '../services/payment';
 import { syncCartToBackend } from '../services/cart';
-import ArtPrintLogo from '../assets/PaaJuuPrints.svg';
+import ArtPrintLogo from '../assets/paajuuprints.svg';
 import { Button } from '../components/ui/button';
 import Footer from '../components/navigation/Footer';
 

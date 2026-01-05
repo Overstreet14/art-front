@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { getProfile, updateProfile, uploadArtwork, type UserProfile } from '../services/artists';
 import { fetchPrintShops, setArtworkPrintShops, type PrintShop } from '../services/artworks';
-import ArtPrintLogo from '../assets/PaaJuuPrints.svg';
+import ArtPrintLogo from '../assets/paajuuprints.svg';
 import { Skeleton } from '../components/ui/skeleton';
 import { Button } from '../components/ui/button';
 import Footer from '../components/navigation/Footer';

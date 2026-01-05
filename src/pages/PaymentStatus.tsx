@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { verifyPayment } from '../services/payment';
 import type { Payment } from '../types/payment';
 import { Button } from '../components/ui/button';
-import ArtPrintLogo from '../assets/PaaJuuPrints.svg';
+import ArtPrintLogo from '../assets/paajuuprints.svg';
 import Footer from '../components/navigation/Footer';
 
 const PaymentStatus = () => {
